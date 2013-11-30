@@ -19,7 +19,7 @@ SN_distance=SN_radius + SN_pitchRadius + 0.0*SN_pitch;
 // Schnecke, mit der Kugellager-Aufnahme unten
 module schnecke_sn() {
 	difference() {
-		trapezoidThread( 
+		* trapezoidThread( 
 			length=SN_length,          // axial length of the threaded rod
 			pitch=SN_pitch,            // axial distance from crest to crest
 			pitchRadius=SN_radius,     // radial distance from center to mid-profile
@@ -31,14 +31,15 @@ module schnecke_sn() {
 			backlash=0.06,          // axial clearance, normalized to pitch
 			stepsPerTurn=40         // number of slices to create per turn
 		);
-		translate([0,0,SN_length - 6]) render(convexity=2) motor_ritzel();
-		// Kugellager Aufnahme (für Miniaturlager, FIXME)
-		translate([0,0,0]) cylinder(r=2.5/2, h=10, center=true, $fn=20);
+		import("Schnecke_bare.stl");
+		translate([0,0,SN_length - 4]) render(convexity=2) motor_ritzel();
 	}
+	// Kugellager Aufnahme
+	translate([0,0,0]) cylinder(r=6/2, h=10, center=true, $fn=20);
 }
 
 module schnecke_rad() {
-	gear( 
+	gear(
 		number_of_teeth=SN_numberTeeth,
 		circular_pitch=360 * SN_pitchRadius/SN_numberTeeth,
 		pressure_angle=28,
@@ -58,7 +59,7 @@ translate([0, +SN_distance, -SN_length/2])
 rotate([0,0,180+SN_angle])
 schnecke_sn();
 
-translate([-SN_thickness/2,0,0])
+*translate([-SN_thickness/2,0,0])
 rotate([0, 90, 0])
 rotate([0, 0, SN_offset - SN_angle/SN_numberTeeth])
 schnecke_rad();
