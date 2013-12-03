@@ -1,3 +1,5 @@
+// Nupsi, passt in ein "19.6mm" Loch, dann kann man ins selbe Loch auch ein Kugellager einbauen.
+
 difference() {
 	union() {
 		translate([0,0,0]) cylinder(r=19/2, h=4, $fn=60);
