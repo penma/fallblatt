@@ -68,13 +68,13 @@ module motor_gegenstueck() {
 		// Aufnahme zum Seitenteil
 		difference() {
 			union() {
-				translate([24/2, 1 + 5 + 20/2, -0.5 + 2]) cube(size=[15, 19, 4], center=true);
-				translate([24/2, 32 + 1 + 21/2, -0.5 + 2]) cube(size=[15, 20, 4], center=true);
+				translate([24/2, 1 + 5 + 20/2, -0.5 + 2]) cube(size=[15, 19, 3], center=true);
+				translate([24/2, 32 + 1 + 21/2, -0.5 + 2]) cube(size=[15, 20, 3], center=true);
 			}
 			translate([24/2, 32 + 1 + 21/2, -0.5 + 2]) cube(size=[5, 21, 5], center=true);
 		}
 	}
 }
 
-motor_aufnahme();
-% motor_gegenstueck();
+% motor_aufnahme();
+motor_gegenstueck();
