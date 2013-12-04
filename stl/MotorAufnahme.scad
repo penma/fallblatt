@@ -21,7 +21,10 @@ module _motor_mount() {
 		// muss nicht über gesamte Breite gehen
 		translate([-50, 1 + 5,-50]) cube(size=[100, 32 - 2*1 - 2*5, 100]);
 	}
-	% rotate([-90,0,0]) {
+}
+
+module _motor_inside() {
+	rotate([-90,0,0]) {
 		_motor_cutout();
 		translate([0,0,32.5]) import("Schnecke_bare.stl");
 	}
@@ -45,6 +48,8 @@ module motor_aufnahme() {
 		translate([-100,-100,6]) cube(size=[200,200,200]);
 		translate([-100,-100,-10 - 2 - 20 + 0.5]) cube(size=[200,200,20]);
 	}
+
+	% _motor_inside();
 
 	// Bodenplatte
 	translate([-12, 0, -10 - 3])
@@ -76,5 +81,5 @@ module motor_gegenstueck() {
 	}
 }
 
-% motor_aufnahme();
-motor_gegenstueck();
+motor_aufnahme();
+* motor_gegenstueck();
