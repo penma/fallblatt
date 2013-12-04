@@ -2,6 +2,8 @@
 // 0 = Achse, hinteres Ende vom Motor
 // Bodenplatte = -( 16/2 + 2 + 3 )
 
+use <Schnecke.scad>
+
 module _motor_cutout() {
 	render() translate([0,0,16]) union() {
 		intersection() {
@@ -26,7 +28,7 @@ module _motor_mount() {
 module _motor_inside() {
 	rotate([-90,0,0]) {
 		_motor_cutout();
-		translate([0,0,32.5]) import("Schnecke_bare.stl");
+		translate([0,0,32.5]) schnecke_sn();
 	}
 }
 
