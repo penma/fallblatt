@@ -14,13 +14,12 @@ module mittelstift() {
 	}
 }
 
+module mittelstift_antistift() {
+	// Nennmaß: 8mm
+	cube(size=[8.5, 8.5, 100], center=true);
+}
+
 use <Blaetterrad.scad>
 use <Plaettchen.scad>
 
 mittelstift();
-% union() {
-	translate([0, 0, 0]) blaetterrad_links();
-	translate([0, 0, 3+4+0.5+70+0.5]) blaetterrad_rechts();
-	
-	translate([0, 7.75, 4+3+0.5+35]) rotate([0, 90, 180]) Plaettchen();
-}

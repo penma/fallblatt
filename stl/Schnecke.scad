@@ -2,6 +2,7 @@ use <libthread.scad>
 use <libgear.scad>
 
 use <MotorRitzel.scad>
+use <Mittelstift.scad>
 
 SN_numberTeeth=10;
 SN_pitchRadius=10;
@@ -39,20 +40,23 @@ module schnecke_sn() {
 }
 
 module schnecke_rad() {
-	gear(
-		number_of_teeth=SN_numberTeeth,
-		circular_pitch=360 * SN_pitchRadius/SN_numberTeeth,
-		pressure_angle=28,
-		clearance = 0,
-		gear_thickness=SN_thickness,
-		rim_thickness=SN_thickness,
-		rim_width=5,
-		hub_thickness=SN_thickness,
-		hub_diameter=10,
-		bore_diameter=6,
-		twist=-SN_pitchRadius/SN_radius,
-		$fn=30
-	);
+	difference() {
+		gear(
+			number_of_teeth=SN_numberTeeth,
+			circular_pitch=360 * SN_pitchRadius/SN_numberTeeth,
+			pressure_angle=28,
+			clearance = 0,
+			gear_thickness=SN_thickness,
+			rim_thickness=SN_thickness,
+			rim_width=5,
+			hub_thickness=SN_thickness,
+			hub_diameter=10,
+			bore_diameter=6,
+			twist=-SN_pitchRadius/SN_radius,
+			$fn=30
+		);
+		mittelstift_antistift();
+	}
 }
 
 translate([0, +SN_distance, -SN_length/2])

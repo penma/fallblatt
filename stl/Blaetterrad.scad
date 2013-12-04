@@ -3,11 +3,8 @@
 // 0 = Mitte Zahnrad, Außenseite
 
 use <libgear.scad>
-
-module _antistift() {
-	// Nennmaß: 8mm
-	cube(size=[8.5, 8.5, 100], center=true);
-}
+use <Plaettchen.scad>
+use <Mittelstift.scad>
 
 module _lochrad() {
 	difference() {
@@ -19,7 +16,7 @@ module _lochrad() {
 				cylinder(h=10, r=1.5, $fn=20);
 			}
 		}
-		_antistift();
+		mittelstift_antistift();
 	}
 }
 
@@ -33,16 +30,7 @@ module _zahnrad() {
 			bore_diameter=0,
 			hub_diameter=16,
 			$fn=30);
-		% translate(v=[0,40.5, 0]) rotate([0,0,1/80 * 360]) gear(
-				number_of_teeth=40,
-				diametral_pitch=0.75,
-				hub_thickness=4, rim_thickness=4,
-				gear_thickness=2,
-				bore_diameter=0,
-				hub_diameter=10,
-			circles=6,
-				$fn=30);
-		_antistift();
+		mittelstift_antistift();
 	}
 }
 
@@ -55,4 +43,11 @@ module blaetterrad_rechts() {
 	_lochrad();
 }
 
-blaetterrad_links();
+module blaetterrad_demo() {
+	mittelstift();
+	translate([0, 0, 0]) blaetterrad_links();
+	translate([0, 0, 3+4+0.5+70+0.5]) blaetterrad_rechts();
+	translate([0, 7.75, 4+3+0.5+35]) rotate([0, 90, 180]) Plaettchen();
+}
+
+blaetterrad_demo();
