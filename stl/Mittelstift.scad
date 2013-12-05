@@ -7,6 +7,8 @@
 // 0.5mm Abstand
 // 3mm Lochrad
 
+// liegend / 0.25mm / 15% / 100mm/s / kein Raft / 10m / 3.5g
+
 module mittelstift() {
 	difference() {
 		translate([-7.8/2, -7.8/2, 0]) cube(size=[7.8, 7.8, 81]);
