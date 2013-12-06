@@ -8,7 +8,7 @@ SN_numberTeeth=10;
 SN_pitchRadius=10;
 SN_thickness=5;
 
-SN_length=20;
+SN_length=30;
 SN_radius=8;
 SN_pitch=2 * 3.1415926 * SN_pitchRadius/SN_numberTeeth;
 
@@ -18,6 +18,7 @@ SN_offset=9;
 SN_distance=SN_radius + SN_pitchRadius + 0.0*SN_pitch;
 
 // Schnecke, mit der Kugellager-Aufnahme unten
+// Drucken: Negativritzel nach unten, Raft, 95/160, 30%, 0.25mm
 module schnecke_sn() {
 	difference() {
 		* trapezoidThread( 
@@ -63,7 +64,7 @@ translate([0, +SN_distance, -SN_length/2])
 rotate([0,0,180+SN_angle])
 schnecke_sn();
 
-*translate([-SN_thickness/2,0,0])
+%translate([-SN_thickness/2,0,0])
 rotate([0, 90, 0])
 rotate([0, 0, SN_offset - SN_angle/SN_numberTeeth])
 schnecke_rad();
