@@ -22,6 +22,10 @@ module mittelstift_antistift() {
 	cube(size=[8.5, 8.5, 100], center=true);
 }
 
+module mittelstift_nupsi() {
+	cylinder(h=7, r1=2.4, r2=2.4, $fn=40);
+}
+
 use <Blaetterrad.scad>
 use <Plaettchen.scad>
 

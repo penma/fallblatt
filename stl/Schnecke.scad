@@ -18,7 +18,7 @@ SN_offset=9;
 SN_distance=SN_radius + SN_pitchRadius + 0.0*SN_pitch;
 
 // Schnecke, mit der Kugellager-Aufnahme unten
-// Drucken: Negativritzel nach unten, Raft, 95/160, 30%, 0.25mm
+// Drucken: Negativritzel nach unten, Raft, 95/160, 30%, 0.25mm = 19min, 3.8g
 module schnecke_sn() {
 	difference() {
 		* trapezoidThread( 

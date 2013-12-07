@@ -11,12 +11,17 @@ module _rahmenverbinder_base() {
 
 // Origin: Mitte
 module rahmenverbinder() {
-	difference() {
+	rotate([-90,0,0]) difference() {
 		_rahmenverbinder_base();
 		for (i = [-20,0,+20]) {
 			translate([i,0,5]) cylinder(h=10, r1=2.4, r2=2.4, $fn=40);
 		}
 	}
+}
+
+module rahmenverbinder_nupsi() {
+	translate([-41 + 15/2,0,0])
+	cube(size=[15, 17.4, 3.8], center=true);
 }
 
 rahmenverbinder();
