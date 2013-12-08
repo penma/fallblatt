@@ -12,8 +12,7 @@
 module mittelstift() {
 	difference() {
 		translate([-7.8/2, -7.8/2, 0]) cube(size=[7.8, 7.8, 81]);
-		translate([0,0,10]) mirror([0,0,1]) cylinder(h=20, r1=3, r2=3, $fn=20);
-		translate([0,0,81-10])              cylinder(h=20, r1=3, r2=3, $fn=20);
+		translate([0,0,-0.5]) cylinder(h=100, r1=3, r2=3, $fn=40);
 	}
 }
 
