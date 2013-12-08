@@ -1,6 +1,9 @@
+RA_abstand=82;
+RA_staerke=3;
+
 module _rahmenverbinder_base() {
 	rotate([90,0,0]) difference() {
-		cube(size=[82, 20, 6], center=true);
+		cube(size=[RA_abstand, 20, 6], center=true);
 		translate([-35,0,0]) cube(size=[20, 18.5, 4.5], center=true);
 		translate([+35,0,0]) cube(size=[20, 18.5, 4.5], center=true);
 	}
@@ -20,7 +23,7 @@ module rahmenverbinder() {
 }
 
 module rahmenverbinder_nupsi() {
-	translate([-41 + 15/2,0,0])
+	translate([-RA_abstand/2 + 15/2,0,0])
 	cube(size=[15, 17.4, 3.8], center=true);
 }
 
