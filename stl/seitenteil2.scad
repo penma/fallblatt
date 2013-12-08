@@ -25,6 +25,9 @@ module _rahmen_seitenwand() {
 		translate([0,-10, 0]) cube(size=[RA_staerke, 115, RA_hoehe]);
 		translate([-RA_staerke,105,60]) rotate([-55,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 200, 100]);
 
+		// Durchgehende Achse
+		translate([0,0,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=3, center=true, $fn=40);
+
 		// Druckoptimierer
 translate([-RA_staerke,60,70]) rotate([-55,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 77, 20]);
 		translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
@@ -42,16 +45,12 @@ translate([-RA_staerke,60,70]) rotate([-55,0,0]) mirror([0,1,0]) cube(size=[3*RA
 module rahmen(side) {
 	// Seitenwand
 	if (side == Lside) translate([-RA_staerke, 0, -RA_hoehe/2]) _rahmen_seitenwand();
-	if (side == Rside) translate([RA_abstand, 0, -RA_hoehe/2]) _rahmen_seitenwand();
+	if (side == Rside) translate([RA_abstand + RA_staerke, 0, -RA_hoehe/2]) mirror([1,0,0]) _rahmen_seitenwand();
 
 	// Blätterrad
 	if (side == Cside) for (i = [2,9,-4,22]) {
 		translate([0.5,0,0]) rotate([-62 + 7 * i,0,0]) rotate([0,90,0]) blaetterrad_demo();
 	}
-
-	// Nupsi Blätterrad
-	if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();
-	if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
 
 	// Rahmenverbinder oben und unten
 	for (z = [-RA_hoehe/2 + 6/2, RA_hoehe/2 - 6/2]) {
