@@ -1,4 +1,4 @@
-RA_abstand=82;
+RA_abstand=84;
 RA_staerke=3;
 
 module _rahmenverbinder_base() {
@@ -9,17 +9,13 @@ module _rahmenverbinder_base() {
 	}
 }
 
-// Stehend (Löcher nach oben zeigend)
+// Stehend
 // kein Raft, 0.30mm, 8%, 110/160 mm/s, 14min, 5.2g
+// neu mit Löchern: kein Raft, 0.30mm, 8%, 110/170 mm/s,  14min, 5.0g
 
 // Origin: Mitte
 module rahmenverbinder() {
-	rotate([-90,0,0]) difference() {
-		_rahmenverbinder_base();
-		for (i = [-20,0,+20]) {
-			translate([i,0,5]) cylinder(h=10, r1=2.4, r2=2.4, $fn=40);
-		}
-	}
+	rotate([-90,0,0]) _rahmenverbinder_base();
 }
 
 module rahmenverbinder_nupsi() {

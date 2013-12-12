@@ -1,3 +1,4 @@
+use <libgear.scad>
 use <Schnecke.scad>
 use <MotorAufnahme.scad>
 use <Blaetterrad.scad>
@@ -5,7 +6,7 @@ use <Mittelstift.scad>
 use <RahmenVerbinder.scad>
 
 RA_staerke = 3;
-RA_abstand = 82;
+RA_abstand = 84;
 RA_hoehe=150;
 
 Lside = 0;
@@ -28,13 +29,16 @@ module _rahmen_seitenwand() {
 		// Durchgehende Achse
 		translate([0,0,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=3, center=true, $fn=40);
 
+		// Nups Nups
+		translate([0, 45.5, RA_hoehe/2 -19.75]) rotate([0,90,0]) cylinder(r=19.6/2, h=10, center=true);
+
 		// Druckoptimierer
 translate([-RA_staerke,60,70]) rotate([-55,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 77, 20]);
-		translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
+		*translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
 		translate([-RA_staerke,10,90]) cube(size=[3*RA_staerke, 40, 25]);
 		translate([-RA_staerke,10,110]) cube(size=[3*RA_staerke, 22, 35]);
 
-		translate([-RA_staerke,40,25]) cube(size=[3*RA_staerke, 50, 25]);
+		*translate([-RA_staerke,40,25]) cube(size=[3*RA_staerke, 50, 25]);
 		translate([-RA_staerke,50,10]) cube(size=[3*RA_staerke, 20, 80]);
 
 		translate([-RA_staerke,0,10]) cube(size=[3*RA_staerke, 20, 57]);
@@ -48,9 +52,19 @@ module rahmen(side) {
 	if (side == Rside) translate([RA_abstand + RA_staerke, 0, -RA_hoehe/2]) mirror([1,0,0]) _rahmen_seitenwand();
 
 	// Blätterrad
-	if (side == Cside) for (i = [2,9,-4,22]) {
-		translate([0.5,0,0]) rotate([-62 + 7 * i,0,0]) rotate([0,90,0]) blaetterrad_demo();
+	if (side == Cside) for (i = [15:900:360]) {
+		translate([0.5,0,0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
 	}
+
+	if (side == Cside) translate([0.5,45.5,-19.75]) rotate([360/53 * -0.3,0,0]) rotate([0,90,0]) gear(
+		number_of_teeth=53,
+		diametral_pitch=0.75,
+		hub_thickness=4, rim_thickness=4,
+		gear_thickness=0,
+		bore_diameter=0,
+		hub_diameter=16,
+		$fn=30);
+
 
 	// Rahmenverbinder oben und unten
 	for (z = [-RA_hoehe/2 + 6/2, RA_hoehe/2 - 6/2]) {
@@ -82,10 +96,19 @@ module rahmen(side) {
 		if (side == Rside) motor_gegenstueck();
 	}
 
-	// Schnecke
+	// Schnecke und restliche Dinge auf der Achse
 	translate([0, 97, 5 -32.5 - 30/2]) {
 		if (side == Cside) translate([RA_abstand - 10 - 3 - 5/2, 0, 0])
 			rotate([0,90,0]) rotate([0,0, 360/20]) schnecke_rad();
+
+		if (side == Cside) translate([0.5,0,0]) rotate([0,90,0]) gear(
+			number_of_teeth=30,
+			diametral_pitch=0.75,
+			hub_thickness=4, rim_thickness=4,
+			gear_thickness=0,
+			bore_diameter=0,
+			hub_diameter=16,
+			$fn=30);
 
 		if (side == Cside) translate([0.5, 0, 0]) rotate([0,90,0]) mittelstift();
 		if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();

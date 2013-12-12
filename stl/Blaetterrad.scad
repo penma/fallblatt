@@ -2,6 +2,9 @@
 // Lochrad 3mm, Zahnrad 4mm
 // 0 = Mitte Zahnrad, Außenseite
 
+// 90/160 230 0.2mm 50% raft   (links)    22min
+//                  75%        (rechts)   6min
+
 use <libgear.scad>
 use <Plaettchen.scad>
 use <Mittelstift.scad>
@@ -35,7 +38,8 @@ module _zahnrad() {
 }
 
 module blaetterrad_links() {
-	translate([0,0,+4]) _lochrad();
+	translate([0,0,+4]) cylinder(h=2, r=10, $fn=50);
+	translate([0,0,+6]) _lochrad();
 	_zahnrad();
 }
 
@@ -46,8 +50,8 @@ module blaetterrad_rechts() {
 module blaetterrad_demo() {
 	mittelstift();
 	translate([0, 0, 0]) blaetterrad_links();
-	translate([0, 0, 3+4+0.5+70+0.5]) blaetterrad_rechts();
-	translate([0, 7.75, 4+3+0.5+35]) rotate([0, 90, 180]) Plaettchen();
+	translate([0, 0, 3+6+0.5+70+0.5]) blaetterrad_rechts();
+	translate([0, 7.75, 3+6+0.5+35]) rotate([0, 90, 180]) Plaettchen();
 }
 
 blaetterrad_demo();
