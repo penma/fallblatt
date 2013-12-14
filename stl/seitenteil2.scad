@@ -18,7 +18,7 @@ Cside = 2;
 module _grossrad() {
 	rotate([0,90,0]) difference() {
 		gear(
-			number_of_teeth=72,
+			number_of_teeth=69,
 			diametral_pitch=0.75,
 			hub_thickness=4, rim_thickness=4,
 			gear_thickness=4,
@@ -59,7 +59,7 @@ module _rahmen_seitenwand() {
 		translate([0,0,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=3, center=true, $fn=40);
 
 		// Nups Nups
-		translate([0, 58, RA_hoehe/2 -21]) rotate([0,90,0]) radnupsi_anti();
+		translate([0, 57.4, RA_hoehe/2 - 17]) rotate([0,90,0]) radnupsi_anti();
 		// Druckoptimierer
 translate([-RA_staerke,70,65]) rotate([-50,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 81, 28]);
 		translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
@@ -77,10 +77,10 @@ translate([-RA_staerke,70,65]) rotate([-50,0,0]) mirror([0,1,0]) cube(size=[3*RA
 
 	difference() {
 		union() {
-			translate([0,0,50]) cube(size=[RA_staerke, 80, 8]);
-			translate([0,50,47.5]) cube(size=[RA_staerke, 20, 13]);
+			translate([0,0,54]) cube(size=[RA_staerke, 80, 8]);
+			translate([0,50,51.5]) cube(size=[RA_staerke, 20, 13]);
 		}
-		translate([0, 58, RA_hoehe/2 -21]) rotate([0,90,0]) radnupsi_anti();
+		translate([0, 57.4, RA_hoehe/2 - 17]) rotate([0,90,0]) radnupsi_anti();
 	}
 }
 
@@ -125,18 +125,15 @@ module rahmen(side) {
 	}
 
 	// Schnecke und restliche Dinge auf der Achse
-	translate([0, 112.5, 5 -32.5 - 30/2]) {
-		if (side == Cside) translate([RA_abstand - 10 - 3 - 5/2, 0, 0])
-			rotate([0,90,0]) rotate([0,0, 17]) schnecke_rad();
-
-		if (side == Cside) translate([0.5,0,0]) rotate([-1,0,0]) _rad2();
+	translate([0, 84 + 23, 5 -32.5 - 30/2 - 1]) {
+		if (side == Cside) translate([0.5,0,0]) rotate([2,0,0]) _rad2();
 
 		if (side == Cside) translate([0.5, 0, 0]) rotate([0,90,0]) mittelstift();
 		if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();
 		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
 	}
 
-	if (side == Cside) translate([0.5,58,-21]) rotate([360/53 * -0.3,0,0]) _grossrad();
+	if (side == Cside) translate([0.5,57.4,-17]) rotate([1.75,0,0]) _grossrad();
 
 }
 

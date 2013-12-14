@@ -30,7 +30,10 @@ module _motor_mount() {
 module _motor_inside() {
 	rotate([-90,0,0]) {
 		_motor_cutout();
-		translate([0,0,32.5 + 30]) rotate([0,180,0]) schnecke_sn();
+		translate([0,0,32.5 + 30 + 1]) rotate([0,180,0]) union() {
+			schnecke_sn();
+			translate([-23,5/2,15]) rotate([90,0,0]) rotate([0,0,10]) schnecke_rad();
+		}
 	}
 }
 
