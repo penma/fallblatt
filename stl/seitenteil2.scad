@@ -4,6 +4,7 @@ use <MotorAufnahme.scad>
 use <Blaetterrad.scad>
 use <Mittelstift.scad>
 use <RahmenVerbinder.scad>
+use <RadLager.scad>
 
 RA_staerke = 3;
 RA_abstand = 84;
@@ -30,8 +31,7 @@ module _rahmen_seitenwand() {
 		translate([0,0,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=3, center=true, $fn=40);
 
 		// Nups Nups
-		translate([0, 45.5, RA_hoehe/2 -19.75]) rotate([0,90,0]) cylinder(r=19.6/2, h=10, center=true);
-
+		translate([0, 45.5, RA_hoehe/2 -19.75]) rotate([0,90,0]) radnupsi_anti();
 		// Druckoptimierer
 translate([-RA_staerke,60,70]) rotate([-55,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 77, 20]);
 		*translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
