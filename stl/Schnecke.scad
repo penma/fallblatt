@@ -4,8 +4,8 @@ use <libgear.scad>
 use <MotorRitzel.scad>
 use <Mittelstift.scad>
 
-SN_numberTeeth=10;
-SN_pitchRadius=10;
+SN_numberTeeth=20;
+SN_pitchRadius=20;
 SN_thickness=5;
 
 SN_length=30;
@@ -40,6 +40,7 @@ module schnecke_sn() {
 	translate([0,0,0]) cylinder(r=6/2, h=10, center=true, $fn=20);
 }
 
+// 30% 0.25mm raft - 6.6g 20m
 module schnecke_rad() {
 	difference() {
 		gear(
@@ -53,18 +54,18 @@ module schnecke_rad() {
 			hub_thickness=SN_thickness,
 			hub_diameter=10,
 			bore_diameter=6,
-			twist=-SN_pitchRadius/SN_radius,
+			twist=-SN_pitchRadius/(2*SN_radius), // no idea why factor 2. But it results in the same twist as for a pitchradius-10 10-teeth wheel...
 			$fn=30
 		);
 		mittelstift_antistift();
 	}
 }
 
-translate([0, +SN_distance, -SN_length/2])
+*translate([0, +SN_distance, -SN_length/2])
 rotate([0,0,180+SN_angle])
 schnecke_sn();
 
-%translate([-SN_thickness/2,0,0])
+translate([-SN_thickness/2,0,0])
 rotate([0, 90, 0])
 rotate([0, 0, SN_offset - SN_angle/SN_numberTeeth])
 schnecke_rad();
