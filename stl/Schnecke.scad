@@ -18,7 +18,7 @@ SN_offset=0;
 SN_distance=SN_radius + SN_pitchRadius + 0.0*SN_pitch;
 
 // Schnecke, mit der Kugellager-Aufnahme unten
-// Drucken: Negativritzel nach unten, Raft, 95/160, 30%, 0.25mm = 19min, 3.8g
+// Drucken: Negativritzel nach unten, Raft, 95/160, 30%, 0.25mm = 17min, 3.4g
 module schnecke_sn() {
 	difference() {
 		union() {
@@ -44,7 +44,7 @@ module schnecke_sn() {
 	translate([0,0,0]) cylinder(r=6/2, h=10, center=true, $fn=20);
 }
 
-// 30% 0.25mm raft - 6.6g 20m
+// 30% 0.25mm raft - 3.?g 14m
 module schnecke_rad() {
 	difference() {
 		gear(
@@ -73,4 +73,5 @@ translate([-SN_thickness/2,0,0])
 rotate([0, 90, 0])
 rotate([0, 0, SN_offset - SN_angle/SN_numberTeeth])
 schnecke_rad();
+
 
