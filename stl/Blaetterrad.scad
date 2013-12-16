@@ -12,11 +12,11 @@ use <Mittelstift.scad>
 module _lochrad() {
 	difference() {
 		difference() {
-			cylinder(h=3, r=10, $fn=50);
+			cylinder(h=3, r=9.5, $fn=50);
 			for (a = [0:9]) {
 				rotate([0,0,(a+0.5)/10 * 360])
-				translate(v=[7.75, 0, -.05])
-				cylinder(h=10, r=1.5, $fn=20);
+				translate(v=[7.5, 0, -.05])
+				cylinder(h=10, r=1.25, $fn=20);
 			}
 		}
 		mittelstift_antistift();
@@ -27,7 +27,7 @@ module _zahnrad() {
 	difference() {
 		gear(
 			number_of_teeth=20,
-			diametral_pitch=0.75,
+			diametral_pitch=1,
 			hub_thickness=4, rim_thickness=4,
 			gear_thickness=0,
 			bore_diameter=0,
@@ -38,9 +38,14 @@ module _zahnrad() {
 }
 
 module blaetterrad_links() {
-	translate([0,0,+4]) cylinder(h=2, r=10, $fn=50);
-	translate([0,0,+6]) _lochrad();
-	_zahnrad();
+	difference() {
+		union() {
+			translate([0,0,+4]) cylinder(h=2, r=9.5, $fn=50);
+			translate([0,0,+6]) _lochrad();
+			_zahnrad();
+		}
+		mittelstift_antistift();
+	}
 }
 
 module blaetterrad_rechts() {
