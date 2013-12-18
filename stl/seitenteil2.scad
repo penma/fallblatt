@@ -18,15 +18,15 @@ Cside = 2;
 module _grossrad() {
 	rotate([0,90,0]) difference() {
 		gear(
-			number_of_teeth=69,
-			diametral_pitch=0.75,
+			number_of_teeth=95,
+			diametral_pitch=1,
 			hub_thickness=4, rim_thickness=4,
 			gear_thickness=4,
 			bore_diameter=6,
 			hub_diameter=10,
 			$fn=30);
 		for (i = [0:5]) {
-			rotate([0, 0, 360/6 * i]) translate([27.5,0,0]) cylinder(h=10, r=10, center=true);
+			rotate([0, 0, 360/6 * i]) translate([29,0,0]) cylinder(h=10, r=11.25, center=true);
 		}
 	}
 }
@@ -36,8 +36,8 @@ module _grossrad() {
 module _rad2() {
 	rotate([0,90,0]) difference() {
 		gear(
-			number_of_teeth=15,
-			diametral_pitch=0.75,
+			number_of_teeth=20,
+			diametral_pitch=1,
 			hub_thickness=4, rim_thickness=4,
 			gear_thickness=4,
 			bore_diameter=0,
@@ -59,7 +59,7 @@ module _rahmen_seitenwand() {
 		translate([0,0,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=3, center=true, $fn=40);
 
 		// Nups Nups
-		translate([0, 57.4, RA_hoehe/2 - 17]) rotate([0,90,0]) radnupsi_anti();
+		translate([0, 54.2, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
 		// Druckoptimierer
 translate([-RA_staerke,70,65]) rotate([-50,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 81, 28]);
 		translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
@@ -77,10 +77,10 @@ translate([-RA_staerke,70,65]) rotate([-50,0,0]) mirror([0,1,0]) cube(size=[3*RA
 
 	difference() {
 		union() {
-			translate([0,0,54]) cube(size=[RA_staerke, 80, 8]);
-			translate([0,50,51.5]) cube(size=[RA_staerke, 20, 13]);
+			translate([0,0,50]) cube(size=[RA_staerke, 80, 8]);
+			translate([0,45,48.5]) cube(size=[RA_staerke, 20, 13]);
 		}
-		translate([0, 57.4, RA_hoehe/2 - 17]) rotate([0,90,0]) radnupsi_anti();
+		translate([0, 54.2, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
 	}
 }
 
@@ -120,7 +120,7 @@ module rahmen(side) {
 
 	// Motor
 	translate([RA_abstand - 10 - 3, 84, 5]) rotate([-90,0,90]) union() {
-		if (side == Cside) motor_aufnahme();
+*		if (side == Cside) motor_aufnahme();
 		if (side == Rside) motor_gegenstueck();
 	}
 
@@ -133,10 +133,11 @@ module rahmen(side) {
 		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
 	}
 
-	if (side == Cside) translate([0.5,57.4,-17]) rotate([1.75,0,0]) _grossrad();
+	if (side == Cside) translate([0.5,54.2,-20]) rotate([1.8,0,0]) _grossrad();
 
 }
 
-*rahmen(Rside);
-rahmen(Lside);
-%rahmen(Cside);
+rahmen(Rside);
+*rahmen(Lside);
+*rahmen(Cside);
+
