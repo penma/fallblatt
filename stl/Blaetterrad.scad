@@ -19,7 +19,7 @@ module _lochrad() {
 				cylinder(h=10, r=1.25, $fn=20);
 			}
 		}
-		mittelstift_antistift();
+		mittelstift_antistift_mb();
 	}
 }
 
@@ -33,7 +33,7 @@ module _zahnrad() {
 			bore_diameter=0,
 			hub_diameter=16,
 			$fn=30);
-		mittelstift_antistift();
+		mittelstift_antistift_mb();
 	}
 }
 
@@ -44,7 +44,7 @@ module blaetterrad_links() {
 			translate([0,0,+6]) _lochrad();
 			_zahnrad();
 		}
-		mittelstift_antistift();
+		mittelstift_antistift_mb();
 	}
 }
 
@@ -59,4 +59,19 @@ module blaetterrad_demo() {
 	translate([0, 7.75, 3+6+0.5+35]) rotate([0, 90, 180]) Plaettchen();
 }
 
-blaetterrad_demo();
+module blaetterrad_pt1() {
+	mittelstift();
+	translate([0, 0, 3+6+0.5+70+0.5]) {
+		blaetterrad_rechts();
+		translate([0, 0, 1.5]) difference() {
+			cube(size=[9,9,3], center=true);
+			cube(size=[7,7,3], center=true);
+		}
+	}
+}
+
+module blaetterrad_pt2() {
+	blaetterrad_links();
+}
+
+blaetterrad_pt1();

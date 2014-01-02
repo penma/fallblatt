@@ -20,7 +20,7 @@ module rahmenverbinder() {
 
 module rahmenverbinder_nupsi() {
 	translate([-RA_abstand/2 + 15/2,0,0])
-	cube(size=[15, 17.4, 3.8], center=true);
+	cube(size=[15, 16.8, 3.8], center=true);
 }
 
 rahmenverbinder();

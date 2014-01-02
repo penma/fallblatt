@@ -18,6 +18,10 @@ module mittelstift() {
 
 module mittelstift_antistift() {
 	// Nennmaß: 8mm
+	cube(size=[8.75, 8.75, 100], center=true);
+}
+module mittelstift_antistift_mb() {
+	// Nennmaß: 8mm
 	cube(size=[8.5, 8.5, 100], center=true);
 }
 

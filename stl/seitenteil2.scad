@@ -1,6 +1,8 @@
 use <libgear.scad>
-use <Schnecke.scad>
-use <MotorAufnahme.scad>
+use <LichtschrankeRad.scad>
+use <LichtschrankeMount.scad>
+use <ServoRad.scad>
+use <ServoMount.scad>
 use <Blaetterrad.scad>
 use <Mittelstift.scad>
 use <RahmenVerbinder.scad>
@@ -13,12 +15,13 @@ RA_hoehe=150;
 Lside = 0;
 Rside = 1;
 Cside = 2;
+Nside = 3;
 
 // 10% 0.3mm 90/160 , 51min 16g
 module _grossrad() {
 	rotate([0,90,0]) difference() {
 		gear(
-			number_of_teeth=95,
+			number_of_teeth=65,
 			diametral_pitch=1,
 			hub_thickness=4, rim_thickness=4,
 			gear_thickness=4,
@@ -26,24 +29,8 @@ module _grossrad() {
 			hub_diameter=10,
 			$fn=30);
 		for (i = [0:5]) {
-			rotate([0, 0, 360/6 * i]) translate([29,0,0]) cylinder(h=10, r=11.25, center=true);
+			rotate([0, 0, 360/6 * i]) translate([19,0,0]) cylinder(h=10, r=8, center=true);
 		}
-	}
-}
-
-// Antriebswelle -> Großes Rad
-// Mit Raft und viel Infill (>= 40%)
-module _rad2() {
-	rotate([0,90,0]) difference() {
-		gear(
-			number_of_teeth=20,
-			diametral_pitch=1,
-			hub_thickness=4, rim_thickness=4,
-			gear_thickness=4,
-			bore_diameter=0,
-			hub_diameter=16,
-			$fn=30);
-		mittelstift_antistift();
 	}
 }
 
@@ -52,35 +39,53 @@ module _rad2() {
 
 module _rahmen_seitenwand() {
 	difference() {
-		translate([0,-10, 0]) cube(size=[RA_staerke, 135, RA_hoehe]);
-		translate([-RA_staerke,125,60]) rotate([-50,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 200, 100]);
+		translate([0,-10, 0]) cube(size=[RA_staerke, 125, RA_hoehe]);
+		translate([-RA_staerke,125,93]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 200, 100]);
 
 		// Durchgehende Achse
 		translate([0,0,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=3, center=true, $fn=40);
 
-		// Nups Nups
-		translate([0, 54.2, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
+		translate([0, 81, RA_hoehe/2 -20]) rotate([90, 180, 90]) servomount_cutout();
 		// Druckoptimierer
-translate([-RA_staerke,70,65]) rotate([-50,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 81, 28]);
+translate([-RA_staerke,84,77]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 86, 25]);
 		translate([-RA_staerke,10,10]) cube(size=[3*RA_staerke, 55, 85]);
 		translate([-RA_staerke,10,90]) cube(size=[3*RA_staerke, 40, 25]);
-		translate([-RA_staerke,10,110]) cube(size=[3*RA_staerke, 29, 35]);
+*		translate([-RA_staerke,10,90]) cube(size=[3*RA_staerke, 54, 55]);
 
 		translate([-RA_staerke,40,25]) cube(size=[3*RA_staerke, 65, 25]);
-		translate([-RA_staerke,50,10]) cube(size=[3*RA_staerke, 20, 80]);
+		translate([-RA_staerke,50,10]) cube(size=[3*RA_staerke, 23, 40]);
 
 		translate([-RA_staerke,0,10]) cube(size=[3*RA_staerke, 20, 57]);
 		translate([-RA_staerke,0,82]) cube(size=[3*RA_staerke, 20, 57]);
+		
 
-		*translate([-RA_staerke,95,10]) cube(size=[3*RA_staerke, 10,50]);
+
+		translate([-RA_staerke,60,40]) cube(size=[3*RA_staerke, 25, 57]);
 	}
 
-	difference() {
+	*difference() {
 		union() {
 			translate([0,0,50]) cube(size=[RA_staerke, 80, 8]);
-			translate([0,45,48.5]) cube(size=[RA_staerke, 20, 13]);
+			translate([0,27,48.5]) cube(size=[RA_staerke, 20, 13]);
 		}
-		translate([0, 54.2, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
+		translate([0, 38, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
+	}
+}
+
+module verbinder_unten() {
+	// 0mm unten
+	rahmenverbinder();
+	translate([RA_abstand/2 - 12.5 - 3 + 4/2, -6, 39]) rotate([0, 0, 180]) mirror([0,1,0]) lichtschranke_mount(15);
+}
+module verbinder_oben() {
+	// 11mm oben
+	rahmenverbinder();
+	translate([RA_abstand/2 - 12.5 - 3 - 11 + 4/2, -6, -25]) rotate([0, 0, 180]) mirror([0,0,1]) mirror([0,1,0]) lichtschranke_mount(1);
+}
+module verbinder_vorne() {
+	difference() {
+		rahmenverbinder();
+		translate([0, -9, 0]) cube(size=[3, 1.5, 10], center=true);
 	}
 }
 
@@ -91,50 +96,57 @@ module rahmen(side) {
 
 	// Blätterrad
 	if (side == Cside) for (i = [15]) {
-		translate([0.5,0,0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
+		% translate([0.5,0,0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
 	}
 
 	// Rahmenverbinder oben und unten
-	for (z = [-RA_hoehe/2 + 6/2, RA_hoehe/2 - 6/2]) {
-		translate([RA_abstand/2,0,z]) {
-			if (side == Cside) rahmenverbinder();
-			if (side == Lside) rahmenverbinder_nupsi();
-			if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
-		}
-	}
-
-	// Rahmenverbinder hinten
-	translate([RA_abstand/2,115,-RA_hoehe/2 + 6/2]) {
+	translate([RA_abstand/2,0, -RA_hoehe/2 + 6/2]) {
 		if (side == Cside) rahmenverbinder();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
+	translate([RA_abstand/2,0, RA_hoehe/2 - 2.5 - 6/2]) {
+		if (side == Cside) verbinder_vorne();
+		if (side == Lside) rahmenverbinder_nupsi();
+		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
+	}
 
-
-	// Rahmen Stabilisierung hinten
-	translate([0,90,20]) rotate([-55,0,0]) {
-		if (side == Cside) translate([0.5, 0, 0]) rotate([0,90,0]) mittelstift();
-		if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();
-		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
+	// Rahmenverbinder hinten
+	translate([RA_abstand/2,105, -RA_hoehe/2 + 6/2]) {
+		if (side == Cside) verbinder_unten();
+		if (side == Lside) rahmenverbinder_nupsi();
+		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
+	}
+	translate([RA_abstand/2,105, 18]) {
+		if (side == Cside) verbinder_oben();
+		if (side == Lside) rahmenverbinder_nupsi();
+		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
 
 	// Motor
-	translate([RA_abstand - 10 - 3, 84, 5]) rotate([-90,0,90]) union() {
-*		if (side == Cside) motor_aufnahme();
-		if (side == Rside) motor_gegenstueck();
+	translate([-RA_staerke, 81, -20]) rotate([90, 180, 90]) union() {
+		if (side == Lside) servomount();
+		if (side == Cside) rotate([0, 0, -1]) translate([0, 0, 3.5]) servorad();
 	}
 
-	// Schnecke und restliche Dinge auf der Achse
-	translate([0, 84 + 23, 5 -32.5 - 30/2 - 1]) {
-		if (side == Cside) translate([0.5,0,0]) rotate([2,0,0]) _rad2();
+	// Das Lichtschrankenrad
+	translate([0, 101.5, -20]) {
+		if (side == Cside) translate([0.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_rad();
+		if (side == Cside) translate([0.5 - 3.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
+		if (side == Cside) translate([0.5 - 3.5 - 13,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
 
-		if (side == Cside) translate([0.5, 0, 0]) rotate([0,90,0]) mittelstift();
+		*if (side == Cside) translate([RA_abstand - 1 - 12.5 - 3 + 4/2, 3, -13]) rotate([0, 0, 180]) {
+			lichtschranke_mount(15);
+		}
+		*if (side == Cside) translate([RA_abstand - 1 - 12.5 - 3 - 13 + 4/2, -2, 13]) rotate([180, 0, 180]) {
+			lichtschranke_mount(1);
+		}
+
 		if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();
 		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
 	}
 
-	if (side == Cside) translate([0.5,54.2,-20]) rotate([1.8,0,0]) _grossrad();
-
+	if (side == Cside) translate([0.5,38,-20]) rotate([-1.1,0,0]) _grossrad();
 }
 
 rahmen(Rside);
