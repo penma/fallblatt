@@ -45,8 +45,8 @@ module servomount_abstandshalter() {
 	}
 }
 
-servomount();
-%servomount_abstandshalter();
-%translate([0, 0, 3.5]) servorad();
+*servomount();
+servomount_abstandshalter();
+*translate([0, 0, 3.5]) servorad();
 
 

@@ -2,7 +2,10 @@
 module lichtschranke_mount(h=0) {
 	translate([-(2 + 1 + 2.5 + 4 + 4), -2 - 3, -14 - 5]) difference() {
 		union() {
-			translate([0, 1, -2 - h]) cube([30, 13, 6 + h]);
+			difference() {
+				translate([0, 1, -2 - h]) cube([30, 13, 6 + h]);
+				translate([2, 0, -3 - h]) cube([30 - 2*2, 15, h]);
+			}
 			
 			translate([0, 1, -1]) cube([5, 13, 6]);
 			translate([2 + 1 + 2.5 + 3.75 + 3.5 + 12.5, 1, -1]) cube([4.75, 13, 6]);

@@ -16,14 +16,14 @@ module lichtschranke_rad() {
 	mittelstift();
 }
 
-module lichtschranke_schlitze(n=10) {
+module lichtschranke_schlitze(n=10, xtr=0) {
 	translate([0, 0, RA_abstand - 1 - 12.5]) {
 		difference() {
 			union() {
 				cylinder(r=18, h=4, $fn=30);
-				translate([-11/2, -11/2, 0]) cube(size=[11,11,10]);
+				translate([-11/2, -11/2, 0]) cube(size=[11,11,10 + xtr]);
 			}
-			mittelstift_antistift();
+			mittelstift_antistift_mb();
 			for (i = [1:n]) {
 				rotate([0, 0, 360/10 * i]) translate([0, 13.75, 0]) cube(size=[2, 5, 10], center=true);
 			}
@@ -32,4 +32,4 @@ module lichtschranke_schlitze(n=10) {
 }
 
 *lichtschranke_rad();
-lichtschranke_schlitze(1);
+lichtschranke_schlitze(10, 4.5);
