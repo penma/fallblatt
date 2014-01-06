@@ -79,7 +79,7 @@ module _rahmen_seitenwand(side) {
 	difference() {
 		_rahmen_frame(side);
 		// Achse
-		translate([0,0.25,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=5.85/2, center=true, $fn=40);
+		translate([0,0.25,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=4.85/2, center=true, $fn=40);
 		// Servo
 		translate([0, 81, RA_hoehe/2 -20]) rotate([90, 180, 90]) servomount_cutout();
 	}
@@ -150,19 +150,13 @@ module rahmen(side) {
 		if (side == Cside) translate([0.5 - 3.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
 		if (side == Cside) translate([0.5 - 3.5 - 13,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
 
-		*if (side == Cside) translate([RA_abstand - 1 - 12.5 - 3 + 4/2, 3, -13]) rotate([0, 0, 180]) {
-			lichtschranke_mount(15);
-		}
-		*if (side == Cside) translate([RA_abstand - 1 - 12.5 - 3 - 13 + 4/2, -2, 13]) rotate([180, 0, 180]) {
-			lichtschranke_mount(1);
-		}
-
 		if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();
 		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
 	}
 
 	if (side == Cside) translate([0.5,38,-20]) rotate([-1.1,0,0]) _grossrad();
 }
+
 
 rahmen(Rside);
 *rahmen(Lside);

@@ -13,7 +13,7 @@ module lichtschranke_rad() {
 		hub_diameter=0,
 		$fn=30);
 
-	mittelstift();
+	mittelstift(6);
 }
 
 module lichtschranke_schlitze(n=10, xtr=0) {

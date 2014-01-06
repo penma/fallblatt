@@ -9,10 +9,10 @@
 
 // liegend / 0.25mm / 15% / 100mm/s / kein Raft / 10m / 3.5g
 
-module mittelstift() {
+module mittelstift(d=4.7) {
 	difference() {
 		translate([-7.8/2, -7.8/2, 0]) cube(size=[7.8, 7.8, 83]);
-		translate([0,0,-0.5]) cylinder(h=100, r1=3, r2=3, $fn=40);
+		translate([0,0,-0.5]) cylinder(h=100, r=d/2, $fn=40);
 	}
 }
 
@@ -26,6 +26,7 @@ module mittelstift_antistift_mb() {
 }
 
 module mittelstift_nupsi() {
+	// passt zum ursprünglichen Nupsi mit "6mm" Loch
 	cylinder(h=7, r1=2.4, r2=2.4, $fn=40);
 }
 
