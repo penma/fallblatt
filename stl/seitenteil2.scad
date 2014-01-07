@@ -15,9 +15,7 @@ RA_hoehe=150;
 Lside = 0;
 Rside = 1;
 Cside = 2;
-Nside = 3;
 
-// 10% 0.3mm 90/160 , 51min 16g
 module _grossrad() {
 	rotate([0,90,0]) difference() {
 		gear(
@@ -34,41 +32,39 @@ module _grossrad() {
 	}
 }
 
-// Test 4 20% 0.3mm 90/170 234 rechts kein Raft (3mm Wandstaerke, größere Cutouts) 46min 18.2g - 47min mit helperdisks
-// Test 5: wie 4, 231 90/160     22.6g 56m
 module _rahmen_frame(side) {
 	intersection() {
 		translate([0,-10, 0]) cube(size=[RA_staerke, 125, RA_hoehe - 2.5]);
-		union() {
-			translate([-RA_staerke,120,RA_hoehe/2 + 10]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[3*RA_staerke, 200, 7.5]);
+		translate([-1, 0, 0]) scale([RA_staerke + 2, 1, 1]) union() {
+			translate([0,120,RA_hoehe/2 + 10]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[1, 200, 7.5]);
 			// oben
-			translate([-RA_staerke,-10,RA_hoehe - 2.5 - 7.5]) cube(size=[3*RA_staerke, 25, 7.5]);
+			translate([0,-10,RA_hoehe - 2.5 - 7.5]) cube(size=[1, 25, 7.5]);
 			// vorn
-			translate([-RA_staerke,-10,0]) cube(size=[3*RA_staerke, 10, RA_hoehe - 2.5]);
+			translate([0,-10,0]) cube(size=[1, 10, RA_hoehe - 2.5]);
 			// unten
-			translate([-RA_staerke,-10,0]) cube(size=[3*RA_staerke, 125, 7.5]);
+			translate([0,-10,0]) cube(size=[1, 125, 7.5]);
 			// hinten
-			translate([-RA_staerke,105,0]) cube(size=[3*RA_staerke, 10, 95]);
+			translate([0,105,0]) cube(size=[1, 10, 95]);
 
 			// Achse
-			translate([-RA_staerke,-7.5,RA_hoehe/2 - 7.5]) cube(size=[3*RA_staerke, 15, 15]);
+			translate([0,-7.5,RA_hoehe/2 - 7.5]) cube(size=[1, 15, 15]);
 			// Hinterer Verbinder
-			translate([-RA_staerke,95,90]) cube(size=[3*RA_staerke, 10, 10]);
+			translate([0,95,90]) cube(size=[1, 10, 10]);
 			// Lichtschrankenrad
-			translate([-RA_staerke, 101.5 - 7.5, RA_hoehe/2 - 20 - 7.5]) cube(size=[3*RA_staerke, 15, 15]);
+			translate([0, 101.5 - 7.5, RA_hoehe/2 - 20 - 7.5]) cube(size=[1, 15, 15]);
 
 			if (side == Lside) {
 				// Nupsi für großes Rad
 				difference() {
 					union() {
-						translate([-RA_staerke, 38 - 7.5, RA_hoehe/2 - 20 - 7.5]) cube([3*RA_staerke, 15, 15]);
-						translate([-RA_staerke, 0, RA_hoehe/2 - 20 - 4]) cube([3*RA_staerke, 100, 8]);
+						translate([0, 38 - 7.5, RA_hoehe/2 - 20 - 7.5]) cube([1, 15, 15]);
+						translate([0, 0, RA_hoehe/2 - 20 - 4]) cube([1, 100, 8]);
 					}
 					translate([0, 38, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
 				}
-				translate([-RA_staerke, 0, RA_hoehe/2 - 0 - 4]) cube([3*RA_staerke, 91, 8]);
-				translate([-RA_staerke, 81 - 20/2, 0]) cube([3*RA_staerke, 20, 20]);
-				translate([-RA_staerke, 101.5 - 15, RA_hoehe/2 - 20 - 7.5]) cube(size=[3*RA_staerke, 20, 15]);
+				translate([0, 0, RA_hoehe/2 - 0 - 4]) cube([1, 91, 8]);
+				translate([0, 81 - 20/2, 0]) cube([1, 20, 20]);
+				translate([0, 101.5 - 15, RA_hoehe/2 - 20 - 7.5]) cube(size=[1, 20, 15]);
 			}
 		}
 	}
@@ -156,7 +152,6 @@ module rahmen(side) {
 
 	if (side == Cside) translate([0.5,38,-20]) rotate([-1.1,0,0]) _grossrad();
 }
-
 
 *rahmen(Rside);
 rahmen(Lside);
