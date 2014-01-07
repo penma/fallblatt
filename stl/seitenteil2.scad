@@ -1,8 +1,8 @@
 use <libgear.scad>
 use <LichtschrankeRad.scad>
-use <LichtschrankeMount.scad>
+use <LichtschrankeHalterung.scad>
 use <ServoRad.scad>
-use <ServoMount.scad>
+use <ServoHalterung.scad>
 use <Blaetterrad.scad>
 use <Mittelstift.scad>
 use <RahmenVerbinder.scad>
@@ -81,7 +81,7 @@ module _rahmen_seitenwand(side) {
 		// Achse
 		translate([0,0.25,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=4.85/2, center=true, $fn=40);
 		// Servo
-		translate([0, 81, RA_hoehe/2 -20]) rotate([90, 180, 90]) servomount_cutout();
+		translate([0, 81, RA_hoehe/2 -20]) rotate([90, 180, 90]) servo_halterung_ausschnitt();
 	}
 
 }
@@ -89,12 +89,12 @@ module _rahmen_seitenwand(side) {
 module verbinder_unten() {
 	// 0mm unten
 	rahmenverbinder();
-	translate([RA_abstand/2 - 12.5 - 3 + 4/2, -6, 39]) rotate([0, 0, 180]) mirror([0,1,0]) lichtschranke_mount(15);
+	translate([RA_abstand/2 - 12.5 - 3 + 4/2, -6, 39]) rotate([0, 0, 180]) mirror([0,1,0]) lichtschranke_halterung(15);
 }
 module verbinder_oben() {
 	// 11mm oben
 	rahmenverbinder();
-	translate([RA_abstand/2 - 12.5 - 3 - 11 + 4/2, -6, -25]) rotate([0, 0, 180]) mirror([0,0,1]) mirror([0,1,0]) lichtschranke_mount(1);
+	translate([RA_abstand/2 - 12.5 - 3 - 11 + 4/2, -6, -25]) rotate([0, 0, 180]) mirror([0,0,1]) mirror([0,1,0]) lichtschranke_halterung(1);
 }
 module verbinder_vorne() {
 	difference() {
@@ -140,7 +140,7 @@ module rahmen(side) {
 
 	// Motor
 	translate([-RA_staerke, 81, -20]) rotate([90, 180, 90]) union() {
-		if (side == Lside) servomount();
+		if (side == Lside) servo_halterung();
 		if (side == Cside) rotate([0, 0, -1]) translate([0, 0, 3.5]) servorad();
 	}
 
@@ -158,8 +158,8 @@ module rahmen(side) {
 }
 
 
-rahmen(Rside);
-*rahmen(Lside);
-*rahmen(Cside);
+*rahmen(Rside);
+rahmen(Lside);
+%rahmen(Cside);
 
 

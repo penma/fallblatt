@@ -6,7 +6,7 @@ module _mutter() {
 	translate([0, 0, 3.4]) cylinder(r1=8/2, r2=5/2, h=1, $fn=20);
 }
 
-module servomount() {
+module servo_halterung() {
 	translate([-10, -9 - 9.1/2 - 12, 0]) difference() {
 		union() {
 			translate([0, 2.5, 0]) cube(size=[20, 65, 3]);
@@ -25,11 +25,11 @@ module servomount() {
 	}
 }
 
-module servomount_cutout() {
+module servo_halterung_ausschnitt() {
 	translate([-10, -9 - 9.1/2 - 12 + 2.5, -1]) cube(size=[20, 65, 5]);
 }
 
-module servomount_abstandshalter() {
+module servo_halterung_abstandshalter() {
 	translate([-10, -9 - 9.1/2 - 12, 0]) difference() {
 		for (y = [9, 61]) {
 			hull() for (x = [5, 15]) {
@@ -45,8 +45,8 @@ module servomount_abstandshalter() {
 	}
 }
 
-*servomount();
-servomount_abstandshalter();
-*translate([0, 0, 3.5]) servorad();
+%servo_halterung();
+servo_halterung_abstandshalter();
+%translate([0, 0, 3.5]) servorad();
 
 

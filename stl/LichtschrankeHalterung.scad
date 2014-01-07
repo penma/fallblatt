@@ -1,5 +1,5 @@
 
-module lichtschranke_mount(h=0) {
+module lichtschranke_halterung(h=0) {
 	translate([-(2 + 1 + 2.5 + 4 + 4), -2 - 3, -14 - 5]) difference() {
 		union() {
 			difference() {
@@ -27,4 +27,4 @@ module lichtschranke_mount(h=0) {
 	% translate([-2.5 - 5, -3, -14]) cube([5, 7, 13.8]);
 }
 
-lichtschranke_mount();
+lichtschranke_halterung();
