@@ -1,4 +1,13 @@
-// 0 = Mitte der Drehachse
+/*
+ * 0 = Mitte der Drehachse
+ *
+ * werden sinnigerweise überhaupt nicht gedruckt, weil Dauer und Materialverbrauch
+ * die Achse lässt sich nicht fein und dennoch stabil drucken
+ * die Lochgröße im Blätterrad ist auf gelaserte (siehe SVG) Platten ausgelegt.
+ *
+ * die in dieser Datei verwendete Stärke ist druckbar, damit können Prototypen
+ * erstellt werden, allerdings sind dann Anpassungen am Blätterrad notwendig
+ */
 
 module Plaettchen() {
 	translate([0,-28.125,0]) difference() {

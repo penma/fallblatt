@@ -10,13 +10,14 @@ use <RadLager.scad>
 
 RA_staerke = 3;
 RA_abstand = 84;
-RA_hoehe=150;
+RA_hoehe=147.5;
 
 Lside = 0;
 Rside = 1;
 Cside = 2;
 
 module _grossrad() {
+	import("cache/grossrad.stl"); *
 	rotate([0,90,0]) difference() {
 		gear(
 			number_of_teeth=65,
@@ -34,11 +35,11 @@ module _grossrad() {
 
 module _rahmen_frame(side) {
 	intersection() {
-		translate([0,-10, 0]) cube(size=[RA_staerke, 125, RA_hoehe - 2.5]);
+		translate([0,-10, 0]) cube(size=[RA_staerke, 125, RA_hoehe]);
 		translate([-1, 0, 0]) scale([RA_staerke + 2, 1, 1]) union() {
-			translate([0,120,RA_hoehe/2 + 10]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[1, 200, 7.5]);
+			translate([0,120,85]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[1, 200, 7.5]);
 			// oben
-			translate([0,-10,RA_hoehe - 2.5 - 7.5]) cube(size=[1, 25, 7.5]);
+			translate([0,-10,RA_hoehe - 7.5]) cube(size=[1, 25, 7.5]);
 			// vorn
 			translate([0,-10,0]) cube(size=[1, 10, RA_hoehe - 2.5]);
 			// unten
@@ -47,24 +48,24 @@ module _rahmen_frame(side) {
 			translate([0,105,0]) cube(size=[1, 10, 95]);
 
 			// Achse
-			translate([0,-7.5,RA_hoehe/2 - 7.5]) cube(size=[1, 15, 15]);
+			translate([0,-7.5,75 - 7.5]) cube(size=[1, 15, 15]);
 			// Hinterer Verbinder
 			translate([0,95,90]) cube(size=[1, 10, 10]);
 			// Lichtschrankenrad
-			translate([0, 101.5 - 7.5, RA_hoehe/2 - 20 - 7.5]) cube(size=[1, 15, 15]);
+			translate([0, 101.5 - 7.5, 75 - 20 - 7.5]) cube(size=[1, 15, 15]);
 
 			if (side == Lside) {
 				// Nupsi für großes Rad
 				difference() {
 					union() {
-						translate([0, 38 - 7.5, RA_hoehe/2 - 20 - 7.5]) cube([1, 15, 15]);
-						translate([0, 0, RA_hoehe/2 - 20 - 4]) cube([1, 100, 8]);
+						translate([0, 38 - 7.5, 55 - 15/2]) cube([1, 15, 15]);
+						translate([0, 0, 55 - 8/2]) cube([1, 100, 8]);
 					}
-					translate([0, 38, RA_hoehe/2 - 20]) rotate([0,90,0]) radnupsi_anti();
+					translate([0, 38, 55]) rotate([0,90,0]) radnupsi_anti();
 				}
-				translate([0, 0, RA_hoehe/2 - 0 - 4]) cube([1, 91, 8]);
+				translate([0, 0, 75 - 4]) cube([1, 91, 8]);
 				translate([0, 81 - 20/2, 0]) cube([1, 20, 20]);
-				translate([0, 101.5 - 15, RA_hoehe/2 - 20 - 7.5]) cube(size=[1, 20, 15]);
+				translate([0, 101.5 - 15, 55 - 7.5]) cube(size=[1, 20, 15]);
 			}
 		}
 	}
@@ -75,9 +76,9 @@ module _rahmen_seitenwand(side) {
 	difference() {
 		_rahmen_frame(side);
 		// Achse
-		translate([0,0.25,RA_hoehe/2]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=4.85/2, center=true, $fn=40);
+		translate([0,0.25,75]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=4.75/2, center=true, $fn=40);
 		// Servo
-		translate([0, 81, RA_hoehe/2 -20]) rotate([90, 180, 90]) servo_halterung_ausschnitt();
+		translate([0, 81, 55]) rotate([90, 180, 90]) servo_halterung_ausschnitt();
 	}
 
 }
@@ -102,46 +103,46 @@ module verbinder_vorne() {
 
 module rahmen(side) {
 	// Seitenwand
-	if (side == Lside) translate([-RA_staerke, 0, -RA_hoehe/2]) _rahmen_seitenwand(side);
-	if (side == Rside) translate([RA_abstand + RA_staerke, 0, -RA_hoehe/2]) mirror([1,0,0]) _rahmen_seitenwand(side);
+	if (side == Lside) translate([-RA_staerke, 0, 0]) _rahmen_seitenwand(side);
+	if (side == Rside) translate([RA_abstand + RA_staerke, 0, 0]) mirror([1,0,0]) _rahmen_seitenwand(side);
 
 	// Blätterrad
 	if (side == Cside) for (i = [15]) {
-		% translate([0.5,0,0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
+		% translate([0.5,0.25, 75]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
 	}
 
 	// Rahmenverbinder oben und unten
-	translate([RA_abstand/2,0, -RA_hoehe/2 + 6/2]) {
+	translate([RA_abstand/2,0, 6/2]) {
 		if (side == Cside) rahmenverbinder();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
-	translate([RA_abstand/2,0, RA_hoehe/2 - 2.5 - 6/2]) {
+	translate([RA_abstand/2,0, RA_hoehe - 6/2]) {
 		if (side == Cside) verbinder_vorne();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
 
 	// Rahmenverbinder hinten
-	translate([RA_abstand/2,105, -RA_hoehe/2 + 6/2]) {
+	translate([RA_abstand/2,105, 6/2]) {
 		if (side == Cside) verbinder_unten();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
-	translate([RA_abstand/2,105, 18]) {
+	translate([RA_abstand/2,105, 93]) {
 		if (side == Cside) verbinder_oben();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
 
 	// Motor
-	translate([-RA_staerke, 81, -20]) rotate([90, 180, 90]) union() {
+	translate([-RA_staerke, 81, 55]) rotate([90, 180, 90]) union() {
 		if (side == Lside) servo_halterung();
 		if (side == Cside) rotate([0, 0, -1]) translate([0, 0, 3.5]) servorad();
 	}
 
 	// Das Lichtschrankenrad
-	translate([0, 101.5, -20]) {
+	translate([0, 101.5, 55]) {
 		if (side == Cside) translate([0.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_rad();
 		if (side == Cside) translate([0.5 - 3.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
 		if (side == Cside) translate([0.5 - 3.5 - 13,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
@@ -150,11 +151,10 @@ module rahmen(side) {
 		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
 	}
 
-	if (side == Cside) translate([0.5,38,-20]) rotate([-1.1,0,0]) _grossrad();
+	if (side == Cside) translate([0.5,38,55]) rotate([-1.1,0,0]) _grossrad();
 }
 
 *rahmen(Rside);
 rahmen(Lside);
-%rahmen(Cside);
-
+*rahmen(Cside);
 

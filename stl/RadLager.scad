@@ -1,5 +1,8 @@
-// Nupsi, passt in ein "8.5" Loch
-// Makerbot, 30%, 0.2mm, 60/110mm/s, Raft, 2 pro Druck sind ok
+// Nupsi, nimmt das große Zahnrad auf.
+// Passt in das, was der Orcabot produziert, wenn man ihn ein 8.5mm Loch drucken lässt.
+// Der Nupsi selbst wird (aus Genauigkeitsgründen) mit dem Makerbot gedruckt,
+// 30% Infill, 0.2mm Layer, 60/110 mm/s, mit Raft
+// sinnigerweise druckt man einige davon auf einmal.
 
 module radnupsi() {
 	difference() {

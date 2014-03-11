@@ -12,7 +12,19 @@ use <Mittelstift.scad>
 module _lochrad() {
 	difference() {
 		difference() {
+			/* Standardversion
+			 * Blätter stützen sich aufeinander ab. Führt zu
+			 * Abnutzung.
+			 * Dafür wird dann nicht so viel Kraft beim
+			 * Umblättern benötigt
+			 */
 			cylinder(h=3, r=9.5, $fn=50);
+			
+			/* Weniger Abnutzung, dafür viel Kraft zum Blättern
+			 * nötig, evtl machen die Nupsis das nicht mit
+			 */
+			//cylinder(h=3, r=10, $fn=50);
+
 			for (a = [0:9]) {
 				rotate([0,0,(a+0.5)/10 * 360])
 				translate(v=[7.5, 0, -.05])
@@ -74,4 +86,4 @@ module blaetterrad_pt2() {
 	blaetterrad_links();
 }
 
-blaetterrad_pt1();
+blaetterrad_pt2();

@@ -4,6 +4,7 @@ use <Mittelstift.scad>
 RA_abstand = 84;
 
 module lichtschranke_rad() {
+	import("cache/lichtschranke_zr.stl"); *
 	gear(
 		number_of_teeth=20,
 		diametral_pitch=1,
@@ -20,7 +21,7 @@ module lichtschranke_schlitze(n=10, xtr=0) {
 	translate([0, 0, RA_abstand - 1 - 12.5]) {
 		difference() {
 			union() {
-				cylinder(r=18, h=4, $fn=30);
+				cylinder(r=18, h=4, $fn=100);
 				translate([-11/2, -11/2, 0]) cube(size=[11,11,10 + xtr]);
 			}
 			mittelstift_antistift_mb();
@@ -31,5 +32,6 @@ module lichtschranke_schlitze(n=10, xtr=0) {
 	}
 }
 
-*lichtschranke_rad();
-lichtschranke_schlitze(10, 4.5);
+lichtschranke_rad();
+*lichtschranke_schlitze(10, 4.5);
+*translate([0,0,-20]) lichtschranke_schlitze(1, 0);
