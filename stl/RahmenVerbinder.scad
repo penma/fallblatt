@@ -8,8 +8,14 @@ module m3_grundloch(h) {
 	}
 }
 
-module _rahmenverbinder_base() {
-	rotate([90,0,0]) difference() {
+
+// Stehend
+// kein Raft, 0.30mm, 8%, 110/160 mm/s, 14min, 5.2g
+// neu mit Löchern: kein Raft, 0.30mm, 8%, 110/170 mm/s,  14min, 5.0g
+
+// Origin: Mitte
+module rahmenverbinder() {
+	difference() {
 		cube(size=[RA_abstand, 20, 6], center=true);
 		for (x = [-1, +1]) {
 			for (y = [-1, +1]) {
@@ -19,20 +25,6 @@ module _rahmenverbinder_base() {
 			}
 		}
 	}
-}
-
-// Stehend
-// kein Raft, 0.30mm, 8%, 110/160 mm/s, 14min, 5.2g
-// neu mit Löchern: kein Raft, 0.30mm, 8%, 110/170 mm/s,  14min, 5.0g
-
-// Origin: Mitte
-module rahmenverbinder() {
-	rotate([-90,0,0]) _rahmenverbinder_base();
-}
-
-module rahmenverbinder_nupsi() {
-*	translate([-RA_abstand/2 + 15/2,0,0])
-	cube(size=[15, 16.8, 3.8], center=true);
 }
 
 rahmenverbinder();

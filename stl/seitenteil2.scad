@@ -192,34 +192,24 @@ module rahmen(side) {
 	if (side == Lside) translate([-RA_staerke, 0, 0]) _rahmen_seitenwand(side);
 	if (side == Rside) translate([RA_abstand + RA_staerke, 0, 0]) mirror([1,0,0]) _rahmen_seitenwand(side);
 
-	// Blätterrad
-	if (side == Cside) for (i = [360/20 * 1.008]) {
-		translate(Blaetterrad_pos + [0.5, 0, 0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
-		*#translate(Blaetterrad_pos + [0.5 + 4 + 0.5 + 1, 0, 0]) rotate([i,0,0]) rotate([0,90,0]) difference() {
-			cylinder(h=4, r=67, $fn=100);
-			cylinder(h=30, r=65, $fn=100, center=true);
+	if (side == Cside) {
+		// Blätterrad
+		for (i = [360/20 * 1.008]) {
+			translate(Blaetterrad_pos + [0.5, 0, 0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
+			*#translate(Blaetterrad_pos + [0.5 + 4 + 0.5 + 1, 0, 0]) rotate([i,0,0]) rotate([0,90,0]) difference() {
+				cylinder(h=4, r=67, $fn=100);
+				cylinder(h=30, r=65, $fn=100, center=true);
+			}
 		}
-	}
 
-	// Rahmenverbinder vorne oben
-	translate([RA_abstand/2,0, RA_hoehe - 6/2]) {
-		if (side == Cside) verbinder_vorne();
-		if (side == Lside) rahmenverbinder_nupsi();
-		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
-	}
+		// Rahmenverbinder vorne oben
+		translate([RA_abstand/2,0, RA_hoehe - 6/2]) verbinder_vorne();
 
-	// Rahmenverbinder unten (vorne wie hinten, eine Einheit)
-	translate([RA_abstand/2,0, 6/2]) {
-		if (side == Cside) verbinder_unten();
-		if (side == Lside) rahmenverbinder_nupsi();
-		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
-	}
-	
-	// Rahmenverbinder hinten oben
-	translate([RA_abstand/2,110, 93]) {
-		if (side == Lside) rahmenverbinder_nupsi();
-		if (side == Cside) rahmenverbinder();
-		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
+		// Rahmenverbinder unten (vorne wie hinten, eine Einheit)
+		translate([RA_abstand/2,0, 6/2]) verbinder_unten();
+		
+		// Rahmenverbinder hinten oben
+		translate([RA_abstand/2,110, 93]) rahmenverbinder();
 	}
 
 	// Motor
