@@ -1,12 +1,12 @@
 use <libgear.scad>
-use <LichtschrankeRad.scad>
-use <LichtschrankeHalterung.scad>
 use <ServoRad.scad>
 use <ServoHalterung.scad>
 use <Blaetterrad.scad>
 use <Mittelstift.scad>
 use <RahmenVerbinder.scad>
 use <RadLager.scad>
+
+use <steppermount.scad>
 
 RA_staerke = 3;
 RA_abstand = 84;
@@ -16,89 +16,175 @@ Lside = 0;
 Rside = 1;
 Cside = 2;
 
+Grossrad_teeth = 80;
+
 module _grossrad() {
-	import("cache/grossrad.stl"); *
+	import("cache/_grossrad.stl"); *
 	rotate([0,90,0]) difference() {
-		gear(
-			number_of_teeth=65,
-			diametral_pitch=1,
-			hub_thickness=4, rim_thickness=4,
-			gear_thickness=4,
-			bore_diameter=6,
-			hub_diameter=10,
-			$fn=30);
-		for (i = [0:5]) {
-			rotate([0, 0, 360/6 * i]) translate([19,0,0]) cylinder(h=10, r=8, center=true);
+		union() {
+			gear(
+				number_of_teeth=Grossrad_teeth,
+				diametral_pitch=1,
+				hub_thickness=4, rim_thickness=4,
+				gear_thickness=4,
+				bore_diameter=0,
+				hub_diameter=10,
+				clearance=0.5, backlash=0.5,
+				$fn=30);
+			mirror([0,0,1]) cylinder(h=2, r=7);
 		}
+		// 6 Löcher
+		for (i = [0:5]) {
+			rotate([0, 0, 360/6 * i]) translate([20,0,0]) cylinder(h=10, r=9, center=true, $fn=100);
+		}
+		// Kugellager versenkt
+		translate([0, 0, -4]) difference() {
+			cylinder(h=6.5, r=20/2, $fn=100);
+			cylinder(h=8, r=6.05/2, $fn=30);
+		}
+
+		// Deko :)
+		translate([0, 0, -0.08]) difference() {
+			cylinder(h=0.4, r=Grossrad_teeth/2 + 0.75 - 7 - 3 - 0.25, $fn=100);
+			cylinder(h=8, r=Grossrad_teeth/2 + 0.75 - 7 - 3 - 1, $fn=100);
+		}
+
+		// Orientierungsschlitze
+		for (i = [0:3]) {
+			rotate([0, 0, 360/4 * i + 180/Grossrad_teeth]) translate([Grossrad_teeth/2 + 0.75 - 4/2 - 5, 0, 0]) cube([4,1,20], true);
+		}
+	}
+}
+
+module m3_cutout(len) {
+	translate([0,0, -0.1]) cylinder(h=len, r=3.5/2, $fn=20);
+	translate([0,0, -0.1]) cylinder(h=1.5, r1=5.75/2, r2=3.5/2, $fn=20);
+}
+
+module m3_grundloch(h) {
+	translate([0,0,-0.1]) {
+		cylinder(h = h+0.1, r=2.9/2, $fn=30);
+		rotate([0,0,45]) cube([2.9 / 2, 2.9 / 2, h+0.1]);
 	}
 }
 
 module _rahmen_frame(side) {
 	intersection() {
-		translate([0,-10, 0]) cube(size=[RA_staerke, 125, RA_hoehe]);
+		translate([0,-10, 0]) cube(size=[RA_staerke, 130, RA_hoehe]);
 		translate([-1, 0, 0]) scale([RA_staerke + 2, 1, 1]) union() {
-			translate([0,120,85]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[1, 200, 7.5]);
+			translate([0,125,85]) rotate([-27.5,0,0]) mirror([0,1,0]) cube(size=[1, 200, 7.5]);
 			// oben
-			translate([0,-10,RA_hoehe - 7.5]) cube(size=[1, 25, 7.5]);
+			translate([0,-10,RA_hoehe - 7.5]) cube(size=[1, 30, 7.5]);
 			// vorn
 			translate([0,-10,0]) cube(size=[1, 10, RA_hoehe - 2.5]);
 			// unten
-			translate([0,-10,0]) cube(size=[1, 125, 7.5]);
+			translate([0,-10,0]) cube(size=[1, 130, 7.5]);
 			// hinten
-			translate([0,105,0]) cube(size=[1, 10, 95]);
+			translate([0,110,0]) cube(size=[1, 10, 95]);
 
 			// Achse
 			translate([0,-7.5,75 - 7.5]) cube(size=[1, 15, 15]);
 			// Hinterer Verbinder
-			translate([0,95,90]) cube(size=[1, 10, 10]);
-			// Lichtschrankenrad
-			translate([0, 101.5 - 7.5, 75 - 20 - 7.5]) cube(size=[1, 15, 15]);
+			translate([0,100,90]) cube(size=[1, 10, 10]);
 
 			if (side == Lside) {
-				// Nupsi für großes Rad
-				difference() {
-					union() {
-						translate([0, 38 - 7.5, 55 - 15/2]) cube([1, 15, 15]);
-						translate([0, 0, 55 - 8/2]) cube([1, 100, 8]);
-					}
-					translate([0, 38, 55]) rotate([0,90,0]) radnupsi_anti();
+				translate([0, 0, 75 - 4]) cube([1, 111, 8]);
+				translate(Grossrad_pos) rotate([0,90,0]) cylinder(h=3, r=28/2, $fn=30);
+				translate(Grossrad_pos - [0,28/2,0]) cube([3, 28, 28/2]);
+				translate(Grossrad_pos - [0,7.5/2,Grossrad_pos[2]]) cube([3, 7.5, Grossrad_pos[2]]);
+				
+				// Flachbandkabel vor großem Rad schützen
+				translate(Grossrad_pos) rotate([0,90,0]) difference() {
+					cylinder(h=1, r=40 + 1.5, $fn = 100);
+					cylinder(h=3, r=40 - 1.5, $fn = 100, center=true);
+					translate([-50,-50,-1]) cube([50,100,50]);
+					translate([-1,-50,-2]) cube([51,51,50]);
 				}
-				translate([0, 0, 75 - 4]) cube([1, 91, 8]);
-				translate([0, 81 - 20/2, 0]) cube([1, 20, 20]);
-				translate([0, 101.5 - 15, 55 - 7.5]) cube(size=[1, 20, 15]);
+
+				translate([0, 101.5 - 15, 55 - 7.5 - 5]) cube(size=[1, 20, 20]);
+				// Lichtschranke Verschraubung
+				translate(Lichtschranke_pos) rotate([0,90,0]) cylinder(h=3, r=8/2, $fn=30);
+				// zwischen Motor und hinterer Verbinder oben
+				translate([0,100,80]) cube(size=[1, 10, 10]);
 			}
 		}
 	}
+}
 
+function rotateX(v, a) = v * [
+	[1, 0, 0],
+	[0, cos(a), -sin(a)],
+	[0, sin(a),  cos(a)]
+];
+
+Blaetterrad_pos = [0,3, 75];
+Grossrad_a = 12;//10;
+Grossrad_pos = Blaetterrad_pos + rotateX([0, 20/2 + Grossrad_teeth/2, 0], Grossrad_a);
+Stepper_a = 0;//10;
+Stepper_pos = Grossrad_pos + rotateX([0, Grossrad_teeth/2 + 10/2, 0], Stepper_a);
+
+Lichtschranke_d = 15;
+Lichtschranke_a = -90 + 27.5;
+Lichtschranke_pos = Grossrad_pos + rotateX([0, Grossrad_teeth/2 + Lichtschranke_d, 0], Lichtschranke_a);
+
+module rv_cut() {
+	rotate([0,90,0]) {
+		for (x = [-5, +5]) {
+			translate([0, x, 0]) m3_cutout(20);
+		}
+	}
 }
 
 module _rahmen_seitenwand(side) {
 	difference() {
 		_rahmen_frame(side);
 		// Achse
-		translate([0,0.25,75]) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=4.75/2, center=true, $fn=40);
+		translate(Blaetterrad_pos) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=4.5/2, center=true, $fn=40);
+		translate(Blaetterrad_pos) rotate([0,90,0]) m3_cutout(10);
+		// Lager
+		translate(Grossrad_pos) rotate([0,90,0]) cylinder(h=RA_staerke*3, r=19.1/2, center=true, $fn=40);
 		// Servo
-		translate([0, 81, 55]) rotate([90, 180, 90]) servo_halterung_ausschnitt();
+		if (side == Lside) translate(Stepper_pos) rotate([-Stepper_a, 0, 0]) rotate([0, 90, 0]) motor_mount_cutout();
+
+		translate([0,0,6/2]) rv_cut();
+		translate([0,0,RA_hoehe - 6/2]) rv_cut();
+		translate([0,110,6/2]) rv_cut();
+		translate([0,110,93]) rv_cut();
+
+		if (side == Lside) translate(Lichtschranke_pos) rotate([0,90,0]) m3_cutout(10);
 	}
 
 }
 
 module verbinder_unten() {
-	// 0mm unten
 	rahmenverbinder();
-	translate([RA_abstand/2 - 12.5 - 3 + 4/2, -6, 39]) rotate([0, 0, 180]) mirror([0,1,0]) lichtschranke_halterung(15);
-}
-module verbinder_oben() {
-	// 11mm oben
-	rahmenverbinder();
-	translate([RA_abstand/2 - 12.5 - 3 - 11 + 4/2, -6, -25]) rotate([0, 0, 180]) mirror([0,0,1]) mirror([0,1,0]) lichtschranke_halterung(1);
+
+	translate([0,110,0]) difference() {
+		rahmenverbinder();
+		for (i = [-1,0,+1]) {
+			translate([i * RA_abstand/2 * 3/4, 0, 0]) {
+				translate([0,0,-3.1]) cylinder(h=6.2, r=3.5/2, $fn=20);
+				translate([0,0,1]) cylinder(h=2.1, r1=3.5/2, r2=7/2, $fn=20);
+			}
+		}
+	}
+
+	// Lol, Platine
+	% translate([0, 70, +1.5]) {
+		cube(size=[RA_abstand, 59, 2.5], center=true);
+		translate([-RA_abstand/2, -30 + 15, 1.25]) cube([10,25,17.5]);
+	}
+	
+	for (i = [-1,+1]) {
+		scale([i,1,1]) translate([RA_abstand/2 - 5,10,-3]) {
+			cube([5, 90, 3]);
+			translate([0,30 - 3,0]) cube(size=[5, 3, 6]);
+		}
+	}
 }
 module verbinder_vorne() {
-	difference() {
-		rahmenverbinder();
-		translate([0, -9, 0]) cube(size=[3, 1.5, 10], center=true);
-	}
-	translate([0,-10 + 0.5/2, -3 - 3/2]) cube(size=[RA_abstand, 0.5, 3], center=true);
+	rahmenverbinder();
+	translate([0,-10 + 0.5/2, -5.5 -3/2]) cube(size=[RA_abstand, 0.5, 8], center=true);
 }
 
 module rahmen(side) {
@@ -107,54 +193,49 @@ module rahmen(side) {
 	if (side == Rside) translate([RA_abstand + RA_staerke, 0, 0]) mirror([1,0,0]) _rahmen_seitenwand(side);
 
 	// Blätterrad
-	if (side == Cside) for (i = [15]) {
-		% translate([0.5,0.25, 75]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
+	if (side == Cside) for (i = [360/20 * 1.008]) {
+		translate(Blaetterrad_pos + [0.5, 0, 0]) rotate([i,0,0]) rotate([0,90,0]) blaetterrad_demo();
+		*#translate(Blaetterrad_pos + [0.5 + 4 + 0.5 + 1, 0, 0]) rotate([i,0,0]) rotate([0,90,0]) difference() {
+			cylinder(h=4, r=67, $fn=100);
+			cylinder(h=30, r=65, $fn=100, center=true);
+		}
 	}
 
-	// Rahmenverbinder oben und unten
-	translate([RA_abstand/2,0, 6/2]) {
-		if (side == Cside) rahmenverbinder();
-		if (side == Lside) rahmenverbinder_nupsi();
-		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
-	}
+	// Rahmenverbinder vorne oben
 	translate([RA_abstand/2,0, RA_hoehe - 6/2]) {
 		if (side == Cside) verbinder_vorne();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
 
-	// Rahmenverbinder hinten
-	translate([RA_abstand/2,105, 6/2]) {
+	// Rahmenverbinder unten (vorne wie hinten, eine Einheit)
+	translate([RA_abstand/2,0, 6/2]) {
 		if (side == Cside) verbinder_unten();
 		if (side == Lside) rahmenverbinder_nupsi();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
-	translate([RA_abstand/2,105, 93]) {
-		if (side == Cside) verbinder_oben();
+	
+	// Rahmenverbinder hinten oben
+	translate([RA_abstand/2,110, 93]) {
 		if (side == Lside) rahmenverbinder_nupsi();
+		if (side == Cside) rahmenverbinder();
 		if (side == Rside) rotate([0,0,180]) rahmenverbinder_nupsi();
 	}
 
 	// Motor
-	translate([-RA_staerke, 81, 55]) rotate([90, 180, 90]) union() {
-		if (side == Lside) servo_halterung();
-		if (side == Cside) rotate([0, 0, -1]) translate([0, 0, 3.5]) servorad();
+	translate(Stepper_pos - [RA_staerke, 0, 0]) rotate([-Stepper_a, 0, 0]) rotate([0, 90, 0]) union() {
+		if (side == Lside) motor_mount();
+		if (side == Cside) motor_rad();
+		if (side == Cside) translate([0,0,3 + 22]) motor_platte();
 	}
 
-	// Das Lichtschrankenrad
-	translate([0, 101.5, 55]) {
-		if (side == Cside) translate([0.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_rad();
-		if (side == Cside) translate([0.5 - 3.5,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
-		if (side == Cside) translate([0.5 - 3.5 - 13,0,0]) rotate([10, 0, 0]) rotate([0, 90, 0]) lichtschranke_schlitze();
 
-		if (side == Lside) rotate([0,90,0]) mittelstift_nupsi();
-		if (side == Rside) translate([RA_abstand,0,0]) rotate([0,-90,0]) mittelstift_nupsi();
-	}
-
-	if (side == Cside) translate([0.5,38,55]) rotate([-1.1,0,0]) _grossrad();
+	if (side == Cside) translate(Grossrad_pos + [0.5, 0, 0]) rotate([180/65 + 3.75,0,0]) _grossrad();
+	if (side == Cside) translate(Lichtschranke_pos + [0.5, 0, 0]) rotate([90 - Lichtschranke_a,0,0]) translate([-4/2, -11/2, 0]) cube([4, 11, 22.5]);
+	if (side == Cside) translate(Lichtschranke_pos + [0.5, 0, 0]) rotate([90 - Lichtschranke_a,0,0]) translate([19, -11/2, -2]) rotate([0,0,90]) import("lichtschranke-bla.stl");
 }
 
-*rahmen(Rside);
+rahmen(Rside);
+%rahmen(Cside);
 rahmen(Lside);
-*rahmen(Cside);
 
