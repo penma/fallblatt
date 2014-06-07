@@ -43,12 +43,6 @@ module _grossrad() {
 			cylinder(h=8, r=6.05/2, $fn=30);
 		}
 
-		// Deko :)
-		translate([0, 0, -0.08]) difference() {
-			cylinder(h=0.4, r=Grossrad_teeth/2 + 0.75 - 7 - 3 - 0.25, $fn=100);
-			cylinder(h=8, r=Grossrad_teeth/2 + 0.75 - 7 - 3 - 1, $fn=100);
-		}
-
 		// Orientierungsschlitze
 		for (i = [0:3]) {
 			rotate([0, 0, 360/4 * i + 180/Grossrad_teeth]) translate([Grossrad_teeth/2 + 0.75 - 4/2 - 5, 0, 0]) cube([4,1,20], true);
@@ -88,11 +82,14 @@ module _rahmen_frame(side) {
 			translate([0,100,90]) cube(size=[1, 10, 10]);
 
 			if (side == Lside) {
+				/* Waagerechte */
 				translate([0, 0, 75 - 4]) cube([1, 111, 8]);
+
+				/* Grossrad + Senkrechte */
 				translate(Grossrad_pos) rotate([0,90,0]) cylinder(h=3, r=28/2, $fn=30);
 				translate(Grossrad_pos - [0,28/2,0]) cube([3, 28, 28/2]);
 				translate(Grossrad_pos - [0,7.5/2,Grossrad_pos[2]]) cube([3, 7.5, Grossrad_pos[2]]);
-				
+
 				// Flachbandkabel vor großem Rad schützen
 				translate(Grossrad_pos) rotate([0,90,0]) difference() {
 					cylinder(h=1, r=40 + 1.5, $fn = 100);
@@ -101,7 +98,6 @@ module _rahmen_frame(side) {
 					translate([-1,-50,-2]) cube([51,51,50]);
 				}
 
-				translate([0, 101.5 - 15, 55 - 7.5 - 5]) cube(size=[1, 20, 20]);
 				// Lichtschranke Verschraubung
 				translate(Lichtschranke_pos) rotate([0,90,0]) cylinder(h=3, r=8/2, $fn=30);
 				// zwischen Motor und hinterer Verbinder oben
@@ -118,9 +114,9 @@ function rotateX(v, a) = v * [
 ];
 
 Blaetterrad_pos = [0,3, 75];
-Grossrad_a = 12;//10;
+Grossrad_a = 12;
 Grossrad_pos = Blaetterrad_pos + rotateX([0, 20/2 + Grossrad_teeth/2, 0], Grossrad_a);
-Stepper_a = 0;//10;
+Stepper_a = 0;
 Stepper_pos = Grossrad_pos + rotateX([0, Grossrad_teeth/2 + 10/2, 0], Stepper_a);
 
 Lichtschranke_d = 15;
@@ -182,6 +178,7 @@ module verbinder_unten() {
 		}
 	}
 }
+
 module verbinder_vorne() {
 	rahmenverbinder();
 	translate([0,-10 + 0.5/2, -5.5 -3/2]) cube(size=[RA_abstand, 0.5, 8], center=true);
