@@ -9,7 +9,15 @@
  * erstellt werden, allerdings sind dann Anpassungen am Blätterrad notwendig
  */
 
-module Plaettchen() {
+breite = 75;
+pinlaenge = 2;
+pindurchmesser = 1.75;
+pinabstand = 2;
+radabstand = 5.25;
+hoehe = 60;
+dicke = 0.8;
+
+module Plaettchen_alt() {
 	translate([0,-28.125,0]) difference() {
 		cube(size=[75, 60, 0.75], center=true);
 
@@ -22,5 +30,28 @@ module Plaettchen() {
 	}
 }
 
+module Plaettchen2D() {
+	translate([0, -pinabstand, 0]) for (i = [+1,-1]) {
+		scale([i, 1, 1]) polygon([
+			[breite/2 - pinlaenge, 0],
+			[breite/2 - pinlaenge, pinabstand - pindurchmesser/2],
+			[breite/2, pinabstand - pindurchmesser/2],
+			[breite/2, pinabstand + pindurchmesser/2],
+			[breite/2 - pinlaenge, pinabstand + pindurchmesser/2],
+			[breite/2 - pinlaenge, pinabstand + radabstand],
+			[breite/2, pinabstand + radabstand],
+			[breite/2, hoehe],
+			[0, hoehe],
+			[0, 0]
+		]);
+	}
+}
+
+
+module Plaettchen() {
+	linear_extrude(height = dicke, center = true) Plaettchen2D();
+}
+
 Plaettchen();
 
+translate([0, 0, -1]) mirror([0,1,0]) Plaettchen_alt();

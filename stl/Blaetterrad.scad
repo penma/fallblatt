@@ -12,23 +12,12 @@ use <Mittelstift.scad>
 module _lochrad() {
 	difference() {
 		difference() {
-			/* Standardversion
-			 * Blätter stützen sich aufeinander ab. Führt zu
-			 * Abnutzung.
-			 * Dafür wird dann nicht so viel Kraft beim
-			 * Umblättern benötigt
-			 */
 			cylinder(h=3, r=9.5, $fn=50);
-			
-			/* Weniger Abnutzung, dafür viel Kraft zum Blättern
-			 * nötig, evtl machen die Nupsis das nicht mit
-			 */
-			//cylinder(h=3, r=10, $fn=50);
 
 			for (a = [0:9]) {
 				rotate([0,0,(a+0.5)/10 * 360])
 				translate(v=[7.5, 0, -.05])
-				cylinder(h=10, r=1.25, $fn=20);
+				cylinder(h=10, r=2.5/2, $fn=20);
 			}
 		}
 		mittelstift_antistift_mb();
@@ -44,6 +33,7 @@ module _zahnrad() {
 			gear_thickness=0,
 			bore_diameter=0,
 			hub_diameter=16,
+			clearance=0.5, backlash=0.5,
 			$fn=30);
 		mittelstift_antistift_mb();
 	}
@@ -68,7 +58,24 @@ module blaetterrad_demo() {
 	mittelstift();
 	translate([0, 0, 0]) blaetterrad_links();
 	translate([0, 0, 3+6+0.5+70+0.5]) blaetterrad_rechts();
-	translate([0, 7.75, 3+6+0.5+35]) rotate([0, 90, 180]) Plaettchen();
+
+	for (i = [
+		[1, 1.1],
+		[2, -0.3],
+		[3, 0.4],
+		[4, 0.1],
+		[5, 0.3],
+		[6, 1.25 - 0.008],
+		[7, 9],
+		[8, 7],
+		[9, 5],
+		[10, 3]
+	]) {
+		rotate([0,0,( i[0] +0.5)/10 * 360])
+		translate(v=[7.5, 0, -.05])
+		rotate([0,0, 360/20 * i[1]])
+		translate([0, 0, 3+6+0.5+35]) rotate([0, 90, 180]) Plaettchen();
+	}
 }
 
 module blaetterrad_pt1() {

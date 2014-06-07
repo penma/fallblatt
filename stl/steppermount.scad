@@ -20,10 +20,9 @@ module motor_rad() {
 				hub_diameter=10,
 				clearance=0.5, backlash=0.5); // kann man hier bestimmt auch reduzieren, weils andere rad ja schon spiel hat.
 				// alternativ bei beiden raedern auf 0.25/0.25 runtergehen... oder so
-			translate([0,0,6]) cylinder(h=6, r=10/2);
+			translate([0,0,6]) cylinder(h=11, r=10/2);
 		}
-		translate([0,0,1]) cylinder(h=15, r=5.25/2);
-		translate([0,0,9]) rotate([90,0,0]) cylinder(h=20, r=2.8/2, center=true);
+		translate([0,0,3.5]) cylinder(h=15, r=5.25/2);
 	}
 }
 
@@ -67,6 +66,9 @@ module motor_platte() {
 		/* Für Achse und so */
 		cylinder(h=10, center=true, r=12.5, $fn = 150);
 	}
+
+	/* Motor Dummy */
+	translate([-35/2, -35/2, 3]) cube([35, 35, 22]);
 }
 
 module motor_mount() {
