@@ -68,7 +68,7 @@ module motor_platte() {
 	}
 
 	/* Motor Dummy */
-	translate([-35/2, -35/2, 3]) cube([35, 35, 22]);
+	%translate([-35/2, -35/2, 3]) cube([35, 35, 22]);
 }
 
 module motor_mount() {
