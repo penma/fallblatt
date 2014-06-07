@@ -1,10 +1,6 @@
 use <libgear.scad>
-use <ServoRad.scad>
-use <ServoHalterung.scad>
 use <Blaetterrad.scad>
-use <Mittelstift.scad>
 use <RahmenVerbinder.scad>
-use <RadLager.scad>
 
 use <steppermount.scad>
 
