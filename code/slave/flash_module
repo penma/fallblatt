@@ -1,0 +1,15 @@
+#!/bin/sh
+
+AVRDUDE="avrdude -p t2313 -c usbasp"
+
+# 0 unused
+# 1 steps per num (40)
+# 2 numbers (10)
+# 3 offset (32)
+# 4 address (n)
+
+if [ "$2" = "onlyfuses" ]; then
+	$AVRDUDE -U hfuse:w:0x9b:m -U lfuse:w:0xe4:m
+else
+	$AVRDUDE -U hfuse:w:0x9b:m -U lfuse:w:0xe4:m -U flash:w:main.hex -U eeprom:w:0xff,40,10,32,$1:m
+fi

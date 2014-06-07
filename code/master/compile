@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+f() {
+	printf '\n\033[4m%-'$(stty size | cut -d ' ' -f 2)'s\033[m\n' "$*" >&2
+}
+
+d() { f $*; "$@"; }
+
+d avr-gcc \
+	-mmcu=attiny2313a -DF_CPU=8000000UL \
+	-gdwarf-2 -std=gnu99 -Os -fwhole-program -flto -mstrict-X -fmerge-all-constants \
+	-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
+	-Wall -Wundef -Wno-main -Wno-comment -Werror=implicit-function-declaration \
+	-fstack-usage -Wstack-usage=4 \
+	-I. master.c twi_smaster.c si2c_master.c taster.c debug.c \
+	-o main.elf
+
+f stack usage by function
+column -t -s '	 :' *.su | sort -n -k 5
+
+f section sizes
+avr-objdump -hw -j.text -j.bss -j.data main.elf | tail -n +5
+
+f code size by function
+avr-nm --print-size --size-sort main.elf
+
